@@ -3,13 +3,13 @@ using UnityEngine;
 public class ThirdPersonCamera : MonoBehaviour
 {
     public Transform player;  // Referencia al jugador
-    public Vector3 offset = new Vector3(0, 3, -6);  // Posición inicial de la cámara (más arriba y hacia atrás)
+    public Vector3 offset = new Vector3(0, 3, -6);  // Posición de la cámara
     public float sensitivity = 5f;
     public float zoomSpeed = 2f;
     public float minZoom = 2f;
     public float maxZoom = 10f;
-    public float minRotationY = -40f;  // Limitar la rotación vertical
-    public float maxRotationY = 40f;   // Limitar la rotación vertical
+    public float minRotationY = -40f;
+    public float maxRotationY = 40f;
 
     private float rotationX;
     private float rotationY;
@@ -24,7 +24,22 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void Update()
     {
-        // Rotación de la cámara con el mouse
+        // Detectar la tecla "Esc" para alternar la visibilidad y bloqueo del cursor
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.None;  // Libera el cursor
+                Cursor.visible = true;  // Muestra el cursor
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;  // Bloquea el cursor
+                Cursor.visible = false;  // Oculta el cursor
+            }
+        }
+
+        // Rotación de la cámara
         rotationX += Input.GetAxis("Mouse X") * sensitivity;
         rotationY -= Input.GetAxis("Mouse Y") * sensitivity;
         rotationY = Mathf.Clamp(rotationY, minRotationY, maxRotationY); // Limitar la rotación vertical
@@ -41,7 +56,7 @@ public class ThirdPersonCamera : MonoBehaviour
         // Aplicar la rotación de la cámara
         Quaternion rotation = Quaternion.Euler(rotationY, rotationX, 0);
 
-        // Establecer una posición ligeramente más alta y hacia la izquierda
+        // Establecer la posición de la cámara
         Vector3 desiredPosition = player.position + rotation * offset;
 
         // Aplicar la posición y mantener la vista del jugador

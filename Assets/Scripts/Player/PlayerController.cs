@@ -1,4 +1,14 @@
 using UnityEngine;
+using System.Collections;
+
+public class Proyectil : MonoBehaviour
+{
+    void Start()
+    {
+        // Destruye el GameObject después de 3 segundos
+        Destroy(gameObject, 3f);
+    }
+}
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,13 +17,19 @@ public class PlayerController : MonoBehaviour
     public float sprintMultiplier = 1.5f;
     public float jumpForce = 7f;
     public float gravity = 9.81f;
-    
+
     [Header("References")]
     public CharacterController controller;
-    public Transform cameraTransform;  // Referencia a la cámara para seguir la rotación
+    public Transform cameraTransform;
+
+    [Header("Projectile")]
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 60f;
+    public float fireRate = 0.0f;
 
     private Vector3 velocity;
     private bool isGrounded;
+    private bool isFiring = false;
 
     void Start()
     {
@@ -25,19 +41,15 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = controller.isGrounded;
 
-        // Obtener la rotación de la cámara solo en el eje Y
         float cameraYRotation = cameraTransform.eulerAngles.y;
-        transform.rotation = Quaternion.Euler(0, cameraYRotation, 0);  // Aplica la rotación al jugador
+        transform.rotation = Quaternion.Euler(0, cameraYRotation, 0);
 
-        // Obtener entrada de movimiento (WASD)
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         Vector3 moveDirection = new Vector3(horizontal, 0, vertical).normalized;
 
-        // Aplicar dirección de movimiento basada en la cámara
         if (moveDirection.magnitude >= 0.1f)
         {
-            // Convertimos la dirección de movimiento en función de la cámara
             Quaternion rotation = Quaternion.Euler(0, cameraYRotation, 0);
             Vector3 moveDir = rotation * moveDirection;
             float speed = moveSpeed * (Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1f);
@@ -45,7 +57,6 @@ public class PlayerController : MonoBehaviour
             controller.Move(moveDir * speed * Time.deltaTime);
         }
 
-        // Aplicar gravedad y salto
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
 
@@ -54,5 +65,45 @@ public class PlayerController : MonoBehaviour
 
         velocity.y -= gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        if (Input.GetMouseButtonDown(0) && !isFiring)
+        {
+            isFiring = true;
+            StartCoroutine(FireContinuously());
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            isFiring = false;
+        }
+    }
+
+    IEnumerator FireContinuously()
+    {
+        while (isFiring)
+        {
+            LaunchProjectile();
+            yield return new WaitForSeconds(fireRate);
+        }
+    }
+
+    void LaunchProjectile()
+    {
+        if (projectilePrefab == null)
+        {
+            Debug.LogWarning("No se ha asignado un prefab de proyectil.");
+            return;
+        }
+
+        Vector3 spawnPosition = transform.position + transform.forward * 1.5f;
+        GameObject projectile = Instantiate(projectilePrefab, spawnPosition, transform.rotation);
+
+        MoveForward moveForward = projectile.GetComponent<MoveForward>();
+        if (moveForward != null)
+        {
+            moveForward.speed = projectileSpeed;
+        }
+
+        // Destruir el proyectil después de 3 segundos
+        Destroy(projectile, 3f);
     }
 }

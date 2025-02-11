@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     [Header("Projectile")]
     public GameObject projectilePrefab;
     private float projectileSpeed = 60f;
-    private float fireRate = 0.02f;
+    private float fireRate = 0.08f;
 
     private Vector3 velocity;
     private bool isGrounded;
@@ -54,12 +54,16 @@ public class PlayerController : MonoBehaviour
 
         if (moveDirection.magnitude >= 0.1f)
         {
+            animator.SetBool("isMoving", true);
             Quaternion rotation = Quaternion.Euler(0, cameraYRotation, 0);
             Vector3 moveDir = rotation * moveDirection;
             float speed = moveSpeed * (Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1f);
 
             controller.Move(moveDir * speed * Time.deltaTime);
-        }
+        } else 
+            {
+                animator.SetBool("isMoving", false);
+            }
 
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
@@ -98,7 +102,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        Vector3 spawnPosition = transform.position + transform.forward * 1.5f;
+        Vector3 spawnPosition = transform.position + transform.forward * 1.5f + Vector3.up * 0.6f;
         GameObject projectile = Instantiate(projectilePrefab, spawnPosition, transform.rotation);
 
         MoveForward moveForward = projectile.GetComponent<MoveForward>();

@@ -339,6 +339,7 @@
 "Assets/Scripts/Bullet/MoveForward.cs"
 "Assets/Scripts/Player/PlayerController.cs"
 "Assets/Scripts/Player/ThirdPersonCamera.cs"
+"Assets/Scripts/Zombies/ZombieController.cs"
 -langversion:9.0
 /deterministic
 /optimize+

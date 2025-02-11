@@ -12,9 +12,12 @@ public class Proyectil : MonoBehaviour
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Animation")]
+    public Animator animator;
+
     [Header("Player Movement")]
-    public float moveSpeed = 5f;
-    public float sprintMultiplier = 1.5f;
+    public float moveSpeed = 6f;
+    public float sprintMultiplier = 2f;
     public float jumpForce = 7f;
     public float gravity = 9.81f;
 
@@ -24,8 +27,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Projectile")]
     public GameObject projectilePrefab;
-    public float projectileSpeed = 60f;
-    public float fireRate = 0.0f;
+    private float projectileSpeed = 60f;
+    private float fireRate = 0.02f;
 
     private Vector3 velocity;
     private bool isGrounded;
@@ -33,6 +36,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         if (controller == null)
             controller = GetComponent<CharacterController>();
     }
@@ -103,7 +107,6 @@ public class PlayerController : MonoBehaviour
             moveForward.speed = projectileSpeed;
         }
 
-        // Destruir el proyectil después de 3 segundos
-        Destroy(projectile, 3f);
+        Destroy(projectile, 0.9f);
     }
 }

@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement")]
     public float moveSpeed = 6f;
     public float sprintMultiplier = 2f;
-    public float jumpForce = 7f;
-    public float gravity = 9.81f;
+    public float jumpForce = 5f;
+    public float gravity = 7f;
 
     [Header("References")]
     public CharacterController controller;

@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement")]
     public float moveSpeed = 6f;
     public float sprintMultiplier = 2f;
-    public float jumpForce = 5f;
+    public float jumpForce = 1f;
     public float gravity = 7f;
 
     [Header("References")]

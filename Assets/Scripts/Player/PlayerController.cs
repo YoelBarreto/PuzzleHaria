@@ -5,7 +5,6 @@ public class Proyectil : MonoBehaviour
 {
     void Start()
     {
-        // Destruye el GameObject después de 3 segundos
         Destroy(gameObject, 3f);
     }
 }
@@ -16,10 +15,10 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
 
     [Header("Player Movement")]
-    public float moveSpeed = 6f;
-    public float sprintMultiplier = 2f;
-    public float jumpForce = 1f;
-    public float gravity = 7f;
+    private float moveSpeed = 6f;
+    private float sprintMultiplier = 1.6f;
+    private float jumpForce = 1f;
+    private float gravity = 17f;
 
     [Header("References")]
     public CharacterController controller;

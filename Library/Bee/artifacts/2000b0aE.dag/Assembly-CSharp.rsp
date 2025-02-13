@@ -344,6 +344,7 @@
 "Assets/Scripts/Player/PlayerController.cs"
 "Assets/Scripts/Player/ThirdPersonCamera.cs"
 "Assets/Scripts/Zombies/ZombieController.cs"
+"Assets/Scripts/Zombies/ZombieSpawner.cs"
 -langversion:9.0
 /deterministic
 /optimize+

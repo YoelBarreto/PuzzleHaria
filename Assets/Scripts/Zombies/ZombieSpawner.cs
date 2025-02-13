@@ -4,11 +4,11 @@ using UnityEngine.AI;
 public class ZombieSpawner : MonoBehaviour
 {
     public GameObject zombiePrefab;
-    public float spawnInterval = 3f;
-    public float spawnRadius = 20f;
+    private float spawnInterval = 0.5f;
+    private float spawnRadius = 30f;
     public LayerMask groundLayer;
 
-    private float nextSpawnTime = 0.2f;
+    private float nextSpawnTime = 0f;
 
     void Update()
     {

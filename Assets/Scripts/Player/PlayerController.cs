@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
 
     [Header("Player Movement")]
-    private float moveSpeed = 6f;
+    private float moveSpeed = 7f;
     private float sprintMultiplier = 1.6f;
     private float jumpForce = 1f;
     private float gravity = 17f;

@@ -343,6 +343,8 @@
 "Assets/Scripts/Bullet/MoveForward.cs"
 "Assets/Scripts/Player/PlayerController.cs"
 "Assets/Scripts/Player/ThirdPersonCamera.cs"
+"Assets/Scripts/Props/DamageManager.cs"
+"Assets/Scripts/Props/PropAnimation.cs"
 "Assets/Scripts/Zombies/ZombieController.cs"
 "Assets/Scripts/Zombies/ZombieSpawner.cs"
 -langversion:9.0

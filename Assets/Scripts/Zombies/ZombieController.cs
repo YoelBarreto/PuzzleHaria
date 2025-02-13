@@ -6,6 +6,8 @@ public class ZombieController : MonoBehaviour
     private Animator animator;
     private NavMeshAgent agent;
     public Transform player;
+    private int vida = 100;
+    private int danoPorBala = 20; // Daño base de la bala
 
     void Start()
     {
@@ -20,10 +22,7 @@ public class ZombieController : MonoBehaviour
 
     void Update()
     {
-
         agent.destination = player.position;
-
-        // Verifica si el zombie realmente se está moviendo
         bool isMoving = agent.velocity.magnitude > 0.1f && agent.remainingDistance > agent.stoppingDistance;
         animator.SetBool("isWalking", isMoving);
     }
@@ -32,11 +31,23 @@ public class ZombieController : MonoBehaviour
     {
         if (other.CompareTag("Projectile"))
         {
-            animator.SetBool("isDeath", true); // Activar animación de muerte
-            agent.isStopped = true; // Detener movimiento
-            agent.velocity = Vector3.zero; // Asegurar que se detenga por completo
+            // Verifica si el daño x2 está activado
+            int damageReceived = DamageManager.Instance.doubleDamage ? danoPorBala * 2 : danoPorBala;
 
-            Destroy(gameObject, 1.5f); // Destruir después de 1.5 segundos
+            // Reduce la vida del zombie
+            vida -= damageReceived;
+            Debug.Log($"¡Impacto! Vida restante del zombie: {vida}");
+
+            if (vida <= 0)
+            {
+                animator.SetBool("isDeath", true);
+                agent.isStopped = true;
+                agent.velocity = Vector3.zero;
+                Destroy(gameObject, 1.5f);
+            }
+
+            // Destruye el proyectil después de golpear al zombie
+            Destroy(other.gameObject);
         }
     }
 }

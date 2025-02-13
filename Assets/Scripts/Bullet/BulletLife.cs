@@ -13,11 +13,15 @@ public class BulletLife : MonoBehaviour
     {
         
     }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Zombie"))
         {
-            Debug.Log("¡Zombie impactado!");
+            Destroy(gameObject);
+        }
+        else
+        {
             Destroy(gameObject);
         }
     }

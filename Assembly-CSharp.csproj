@@ -64,11 +64,13 @@
     <Analyzer Include="/home/alumno/Unity/Hub/Editor/2022.3.55f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets/Scripts/Props/PropAnimation.cs" />
     <Compile Include="Assets/Scripts/Player/ThirdPersonCamera.cs" />
     <Compile Include="Assets/Scripts/Zombies/ZombieController.cs" />
     <Compile Include="Assets/Scripts/Player/PlayerController.cs" />
     <Compile Include="Assets/Scripts/Bullet/MoveForward.cs" />
     <Compile Include="Assets/Scripts/Zombies/ZombieSpawner.cs" />
+    <Compile Include="Assets/Scripts/Props/DamageManager.cs" />
     <Compile Include="Assets/Scripts/Bullet/BulletLife.cs" />
   </ItemGroup>
   <ItemGroup>

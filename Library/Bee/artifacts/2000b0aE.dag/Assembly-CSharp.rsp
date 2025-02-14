@@ -339,6 +339,7 @@
 -r:"Library/Bee/artifacts/2000b0aE.dag/UnityEngine.UI.ref.dll"
 -analyzer:"/home/alumno/Unity/Hub/Editor/2022.3.55f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"/home/alumno/Unity/Hub/Editor/2022.3.55f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
+"Assets/Scripts/Bar/HealthBar.cs"
 "Assets/Scripts/Bullet/BulletLife.cs"
 "Assets/Scripts/Bullet/MoveForward.cs"
 "Assets/Scripts/Player/PlayerController.cs"

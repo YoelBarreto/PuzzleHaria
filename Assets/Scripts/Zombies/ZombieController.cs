@@ -1,28 +1,45 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class ZombieController : MonoBehaviour
 {
     private Animator animator;
     private NavMeshAgent agent;
-    public Transform player;
+    private Collider zombieCollider;
+    private PlayerController playerController;
+
     private int vida = 100;
-    private int danoPorBala = 20; // Daño base de la bala
+    private int danoPorBala = 20;
+
+    private bool canDamagePlayer = true;
+    private float attackCooldown = 1.5f;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        zombieCollider = GetComponent<Collider>();
 
-        if (player == null)
+        // Buscamos el GameObject "Player" y obtenemos su PlayerController
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
         {
-            player = GameObject.FindGameObjectWithTag("Player")?.transform;
+            playerController = playerObj.GetComponent<PlayerController>();
+        }
+        else
+        {
+            Debug.LogError("No se encontró el objeto 'Player' en la escena.");
         }
     }
 
     void Update()
     {
-        agent.destination = player.position;
+        if (playerController != null)
+        {
+            agent.destination = playerController.transform.position;
+        }
+
         bool isMoving = agent.velocity.magnitude > 0.1f && agent.remainingDistance > agent.stoppingDistance;
         animator.SetBool("isWalking", isMoving);
     }
@@ -31,10 +48,9 @@ public class ZombieController : MonoBehaviour
     {
         if (other.CompareTag("Projectile"))
         {
-            // Verifica si el daño x2 está activado
-            int damageReceived = DamageManager.Instance.doubleDamage ? danoPorBala * 2 : danoPorBala;
+            if (vida <= 0) return;
 
-            // Reduce la vida del zombie
+            int damageReceived = DamageManager.Instance.doubleDamage ? danoPorBala * 2 : danoPorBala;
             vida -= damageReceived;
             Debug.Log($"¡Impacto! Vida restante del zombie: {vida}");
 
@@ -43,11 +59,29 @@ public class ZombieController : MonoBehaviour
                 animator.SetBool("isDeath", true);
                 agent.isStopped = true;
                 agent.velocity = Vector3.zero;
+                zombieCollider.enabled = false; // Desactiva el collider al morir
                 Destroy(gameObject, 1.5f);
             }
 
-            // Destruye el proyectil después de golpear al zombie
             Destroy(other.gameObject);
         }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player") && canDamagePlayer && playerController != null)
+        {
+            StartCoroutine(DealDamageToPlayer());
+        }
+    }
+
+    IEnumerator DealDamageToPlayer()
+    {
+        canDamagePlayer = false;
+        playerController.TakeDamage(5);
+        Debug.Log("El zombie golpeó al jugador (-5 vida)");
+
+        yield return new WaitForSeconds(attackCooldown);
+        canDamagePlayer = true;
     }
 }

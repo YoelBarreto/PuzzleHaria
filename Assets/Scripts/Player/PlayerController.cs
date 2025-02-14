@@ -1,16 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-public class Proyectil : MonoBehaviour
-{
-    void Start()
-    {
-        Destroy(gameObject, 3f);
-    }
-}
-
 public class PlayerController : MonoBehaviour
 {
+    [Header("Stats")]
+    public int maxHealth = 100;
+    public int currentHealth;
+    public HealthBar healthbar;
+
     [Header("Animation")]
     public Animator animator;
 
@@ -38,6 +35,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         if (controller == null)
             controller = GetComponent<CharacterController>();
+        currentHealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
     }
 
     void Update()
@@ -59,10 +58,11 @@ public class PlayerController : MonoBehaviour
             float speed = moveSpeed * (Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1f);
 
             controller.Move(moveDir * speed * Time.deltaTime);
-        } else 
-            {
-                animator.SetBool("isMoving", false);
-            }
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
 
         if (isGrounded && velocity.y < 0)
             velocity.y = -2f;
@@ -111,5 +111,18 @@ public class PlayerController : MonoBehaviour
         }
 
         Destroy(projectile, 0.9f);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        healthbar.SetHealth(currentHealth);
+        Debug.Log($"💥 Vida del jugador: {currentHealth}");
+
+        if (currentHealth <= 0)
+        {
+            Debug.Log("☠️ ¡El jugador ha muerto!");
+            // Aquí puedes agregar lógica de muerte del jugador
+        }
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="Assets/Scripts/Bullet/MoveForward.cs" />
     <Compile Include="Assets/Scripts/Zombies/ZombieSpawner.cs" />
     <Compile Include="Assets/Scripts/Props/DamageManager.cs" />
+    <Compile Include="Assets/Scripts/Bar/HealthBar.cs" />
     <Compile Include="Assets/Scripts/Bullet/BulletLife.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
     private bool isFiring = false;
+    private bool isDead = false; // Variable para rastrear si el jugador está muerto
+
+    public ScreenManager screenManager; // Referencia al ScreenManager
 
     void Start()
     {
@@ -41,6 +44,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         isGrounded = controller.isGrounded;
 
         float cameraYRotation = cameraTransform.eulerAngles.y;
@@ -95,20 +103,11 @@ public class PlayerController : MonoBehaviour
 
     void LaunchProjectile()
     {
-        if (projectilePrefab == null)
-        {
-            Debug.LogWarning("No se ha asignado un prefab de proyectil.");
-            return;
-        }
-
         Vector3 spawnPosition = transform.position + transform.forward * 1.5f + Vector3.up * 0.6f;
         GameObject projectile = Instantiate(projectilePrefab, spawnPosition, transform.rotation);
 
         MoveForward moveForward = projectile.GetComponent<MoveForward>();
-        if (moveForward != null)
-        {
-            moveForward.speed = projectileSpeed;
-        }
+        moveForward.speed = projectileSpeed;
 
         Destroy(projectile, 0.9f);
     }
@@ -117,12 +116,35 @@ public class PlayerController : MonoBehaviour
     {
         currentHealth -= damage;
         healthbar.SetHealth(currentHealth);
-        Debug.Log($"💥 Vida del jugador: {currentHealth}");
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isDead)
         {
-            Debug.Log("☠️ ¡El jugador ha muerto!");
-            // Aquí puedes agregar lógica de muerte del jugador
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        animator.SetBool("isDeath", true);
+        StartCoroutine(ShowDeathScreenAfterAnimation());
+    }
+
+    private IEnumerator ShowDeathScreenAfterAnimation()
+    {
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        screenManager.ShowDeathScreen();
+        DisablePlayerControls();
+    }
+
+    public void OnDeathAnimationEnd()
+    {
+        screenManager.ShowDeathScreen();
+        DisablePlayerControls();
+    }
+
+    private void DisablePlayerControls()
+    {
+        enabled = false;
     }
 }

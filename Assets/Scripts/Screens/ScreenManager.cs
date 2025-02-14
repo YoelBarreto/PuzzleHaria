@@ -1,12 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using TMPro;
+using System.Collections;
 
 public class ScreenManager : MonoBehaviour
 {
     public GameObject deathScreen; // Asigna el GameObject de la pantalla de muerte en el inspector
-    public TextMeshPro deadText; // Asigna el Text del DeadText en el inspector
+    public TextMeshProUGUI deadText; // Asigna el TextMeshProUGUI del DeadText en el inspector
     public float transitionDuration = 2.0f; // Duración de la transición
 
     public void ShowDeathScreen()
@@ -44,8 +43,7 @@ public class ScreenManager : MonoBehaviour
 
     private void UpdateDeadTextEffects(float softness, float dilate)
     {
-        Outline outline = deadText.GetComponent<Outline>();
-        outline.effectColor = new Color(0, 0, 0, softness);
-        outline.effectDistance = new Vector2(dilate, -dilate);
+        deadText.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, dilate);
+        deadText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineSoftness, softness);
     }
 }
